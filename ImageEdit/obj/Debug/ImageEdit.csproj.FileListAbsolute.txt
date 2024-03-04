@@ -1,0 +1,7 @@
+C:\Users\aarnjunk\source\repos\ImageEdit\ImageEdit\bin\Debug\ImageEdit.exe.config
+C:\Users\aarnjunk\source\repos\ImageEdit\ImageEdit\bin\Debug\ImageEdit.exe
+C:\Users\aarnjunk\source\repos\ImageEdit\ImageEdit\bin\Debug\ImageEdit.pdb
+C:\Users\aarnjunk\source\repos\ImageEdit\ImageEdit\obj\Debug\ImageEdit.csproj.AssemblyReference.cache
+C:\Users\aarnjunk\source\repos\ImageEdit\ImageEdit\obj\Debug\ImageEdit.csproj.CoreCompileInputs.cache
+C:\Users\aarnjunk\source\repos\ImageEdit\ImageEdit\obj\Debug\ImageEdit.exe
+C:\Users\aarnjunk\source\repos\ImageEdit\ImageEdit\obj\Debug\ImageEdit.pdb
