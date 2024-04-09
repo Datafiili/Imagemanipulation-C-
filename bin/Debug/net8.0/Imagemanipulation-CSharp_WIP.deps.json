@@ -1,0 +1,23 @@
+{
+  "runtimeTarget": {
+    "name": ".NETCoreApp,Version=v8.0",
+    "signature": ""
+  },
+  "compilationOptions": {},
+  "targets": {
+    ".NETCoreApp,Version=v8.0": {
+      "Imagemanipulation-CSharp_WIP/1.0.0": {
+        "runtime": {
+          "Imagemanipulation-CSharp_WIP.dll": {}
+        }
+      }
+    }
+  },
+  "libraries": {
+    "Imagemanipulation-CSharp_WIP/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    }
+  }
+}

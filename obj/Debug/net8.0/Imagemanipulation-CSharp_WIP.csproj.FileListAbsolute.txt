@@ -1,0 +1,15 @@
+D:\Documents\Ohjelmointi\Python\Imagemanipulation-CSharp_WIP\bin\Debug\net8.0\Imagemanipulation-CSharp_WIP.exe
+D:\Documents\Ohjelmointi\Python\Imagemanipulation-CSharp_WIP\bin\Debug\net8.0\Imagemanipulation-CSharp_WIP.deps.json
+D:\Documents\Ohjelmointi\Python\Imagemanipulation-CSharp_WIP\bin\Debug\net8.0\Imagemanipulation-CSharp_WIP.runtimeconfig.json
+D:\Documents\Ohjelmointi\Python\Imagemanipulation-CSharp_WIP\bin\Debug\net8.0\Imagemanipulation-CSharp_WIP.dll
+D:\Documents\Ohjelmointi\Python\Imagemanipulation-CSharp_WIP\bin\Debug\net8.0\Imagemanipulation-CSharp_WIP.pdb
+D:\Documents\Ohjelmointi\Python\Imagemanipulation-CSharp_WIP\obj\Debug\net8.0\Imagemanipulation-CSharp_WIP.GeneratedMSBuildEditorConfig.editorconfig
+D:\Documents\Ohjelmointi\Python\Imagemanipulation-CSharp_WIP\obj\Debug\net8.0\Imagemanipulation-CSharp_WIP.AssemblyInfoInputs.cache
+D:\Documents\Ohjelmointi\Python\Imagemanipulation-CSharp_WIP\obj\Debug\net8.0\Imagemanipulation-CSharp_WIP.AssemblyInfo.cs
+D:\Documents\Ohjelmointi\Python\Imagemanipulation-CSharp_WIP\obj\Debug\net8.0\Imagemanipulation-CSharp_WIP.csproj.CoreCompileInputs.cache
+D:\Documents\Ohjelmointi\Python\Imagemanipulation-CSharp_WIP\obj\Debug\net8.0\Imagemanipulation-CSharp_WIP.sourcelink.json
+D:\Documents\Ohjelmointi\Python\Imagemanipulation-CSharp_WIP\obj\Debug\net8.0\Imagemanipulation-CSharp_WIP.dll
+D:\Documents\Ohjelmointi\Python\Imagemanipulation-CSharp_WIP\obj\Debug\net8.0\refint\Imagemanipulation-CSharp_WIP.dll
+D:\Documents\Ohjelmointi\Python\Imagemanipulation-CSharp_WIP\obj\Debug\net8.0\Imagemanipulation-CSharp_WIP.pdb
+D:\Documents\Ohjelmointi\Python\Imagemanipulation-CSharp_WIP\obj\Debug\net8.0\Imagemanipulation-CSharp_WIP.genruntimeconfig.cache
+D:\Documents\Ohjelmointi\Python\Imagemanipulation-CSharp_WIP\obj\Debug\net8.0\ref\Imagemanipulation-CSharp_WIP.dll
