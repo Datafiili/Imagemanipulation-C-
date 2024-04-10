@@ -11,7 +11,7 @@ namespace ImageEdit
         static void Main(string[] args)
         {
             ImageOpener ImgO = new ImageOpener();
-            Image I = ImgO.OpenImage("Horror.png");
+            Image I = ImgO.OpenImage("Hullu.png");
         }
     }
 
@@ -59,7 +59,7 @@ namespace ImageEdit
             Array.Copy(Data, 4, ChunkData, 0, Data.Length - 8);
             Array.Copy(Data, Data.Length - 4 - 1, CRC, 0, 4);
             //Debugging
-            Console.WriteLine(ByteToASCII(ChunkType));
+            Console.WriteLine(ByteToASCII(ChunkType) + " " + ChunkType[0]  + " " + ChunkType[1]  + " " + ChunkType[2]  + " " + ChunkType[3]);
             //Console.WriteLine(ChunkData);
             //Console.WriteLine(CRC);
         }
@@ -122,36 +122,41 @@ namespace ImageEdit
             }
 
             // -- Checking if all required chunks appear -- //
-            bool[] requiredChunks = new bool[] { false,false,false}; // IHDR, IDAT, IEND
-            for (int i = 0; i < Chunks.Length; i++)
+            //IHDR -> Must be first chunk
+            if(CompareBytes(Chunks[0].ChunkType, new byte[] { 73, 72, 68, 82 }) == false){
+                Console.WriteLine("ERROR: IHDR Chunk missing!");
+                return null;
+            }
+            //IEND -> Must be last chunk
+            if (CompareBytes(Chunks[Chunks.Length - 1].ChunkType, new byte[] { 73, 69, 78, 68 }) == false)
             {
-                //IHDR
-                if(CompareBytes(Chunks[i].ChunkType, new byte[] { 73, 72, 68, 82 })){
-                    requiredChunks[0] = true;
-                }
+                Console.WriteLine("ERROR: IEND Chunk missing!");
+                return null;
+            }
+            //IDAT -> Must somewhere and must be all IDATs in a row
+            bool HasIDAT = false;
+            for (int i = 1; i < Chunks.Length - 1; i++)
+            {
                 //IDAT
                 if (CompareBytes(Chunks[i].ChunkType, new byte[] { 73, 68, 65, 84 }))
                 {
-                    requiredChunks[1] = true;
-                }
-                //IEND
-                if (CompareBytes(Chunks[i].ChunkType, new byte[] { 73, 69, 78, 68 }))
-                {
-                    requiredChunks[2] = true;
+                    HasIDAT = true;
+                    break;
                 }
             }
-            for(int i = 0; i < requiredChunks.Length; i++){
-                if(requiredChunks[i] == false){
-                    Console.WriteLine("Missing Critical Chunk!");
-                    if (i == 0) { Console.WriteLine("IHDR"); }
-                    if (i == 1) { Console.WriteLine("IDAT"); }
-                    if (i == 2) { Console.WriteLine("IEND"); }
-                    return null;
-                }
+
+            if(HasIDAT == false)
+            {
+                Console.WriteLine("ERROR: IDAT Chunk missing!");
+                return null;
             }
             Console.WriteLine("All critical chunks appear.");
 
-            // -- Opener variables -- //
+            // -------------------- Checking Chunks In Order -------------------- //
+
+            int CurrenctChunk = 0;
+
+            // -- variables -- //
             int width = 0; //4 bytes
             int height = 0; //4 bytes
             int bitDepth = 0; //1 byte
@@ -164,30 +169,23 @@ namespace ImageEdit
             Console.WriteLine("// -- Chunks -- //");
 
             // -- IHDR -- //
-            int IHDRindex = -1;
-            for (int i = 0; i < Chunks.Length; i++)
-            {
-                if (CompareBytes(Chunks[i].ChunkType, new byte[] { 73, 72, 68, 82 }))
-                {
-                    IHDRindex = i;
-                }
-                break;
-            }
+            //Must be first and always is.
 
-            if (CompareBytes(Chunks[IHDRindex].ChunkType, new byte[] { 73, 72, 68, 82 })){
+            if (CompareBytes(Chunks[CurrenctChunk].ChunkType, new byte[] { 73, 72, 68, 82 }))
+            {
                 
                 byte[] holder = new byte[4];
-                Array.Copy(Chunks[IHDRindex].ChunkData, 0, holder, 0, 4);
+                Array.Copy(Chunks[CurrenctChunk].ChunkData, 0, holder, 0, 4);
                 width = BytesToDecimal(holder);
 
-                Array.Copy(Chunks[IHDRindex].ChunkData, 4, holder, 0, 4);
+                Array.Copy(Chunks[CurrenctChunk].ChunkData, 4, holder, 0, 4);
                 height = BytesToDecimal(holder);
 
-                bitDepth = Chunks[IHDRindex].ChunkData[8];
-                colorType = Chunks[IHDRindex].ChunkData[9];
-                compressionMethod = Chunks[IHDRindex].ChunkData[10];
-                filterMethod = Chunks[IHDRindex].ChunkData[11];
-                interlaceMethod = Chunks[IHDRindex].ChunkData[12];
+                bitDepth = Chunks[CurrenctChunk].ChunkData[8];
+                colorType = Chunks[CurrenctChunk].ChunkData[9];
+                compressionMethod = Chunks[CurrenctChunk].ChunkData[10];
+                filterMethod = Chunks[CurrenctChunk].ChunkData[11];
+                interlaceMethod = Chunks[CurrenctChunk].ChunkData[12];
 
                 Console.WriteLine("IHDR:");
                 Console.WriteLine("width: " + width);
@@ -199,13 +197,148 @@ namespace ImageEdit
                 Console.WriteLine("interlaceMethod: " + interlaceMethod);
             }
 
+            float ImageGamma = -1f; //If negative -> No Gamma determined.
 
+            bool FoundPLTE = false;
+            while(true)
+            {
+                CurrenctChunk++;
+                
+                //Must appear before PLTE if they even appear.
+                switch(System.Text.Encoding.ASCII.GetString(Chunks[CurrenctChunk].ChunkType)) 
+                {
+                case "sRGB":
+                    Console.WriteLine("Call sRGB function");
+                    break;
+                case "cHRM":
+                    Console.WriteLine("Call cHRM function");
+                    break;
+                case "gAMA":
+                    Console.WriteLine("Call gAMA function");
+                    ImageGamma = gAMA(Chunks[CurrenctChunk]);     
+                    break;
+                case "sBIT":
+                    Console.WriteLine("Call sBIT function");                
+                    break;
+                case "PLTE":
+                    FoundPLTE = true;   
+                    break;
+                }
+                 
+                if(FoundPLTE){
+                    break;
+                }
+            }
 
+            // -- PLTE -- //
+            
+            //Must appear for 3, can appear for 2 & 6
+            //Mismaching cases
+            if(colorType == 3 && !FoundPLTE){
+                return null;
+            }
 
+            if(colorType == 0 || colorType == 4) //can't appear for 0 & 4
+            {
+                if(FoundPLTE){
+                    return null;
+                }
+            }
+            
+            Color[] ColorPalette = new Color[]{};
+            if (FoundPLTE && CompareBytes(Chunks[CurrenctChunk].ChunkType, new byte[] { 80, 76, 84, 69 }))
+            {   
+                //Checking for errors.
+                if(Chunks[CurrenctChunk].ChunkData.Length % 3 != 0){
+                    Console.WriteLine("ERROR: Palette has wrong amount of data!");
+                    return null;
+                }
+                if(Math.Pow(2,bitDepth) < Chunks[CurrenctChunk].ChunkData.Length / 3)
+                {
+                    Console.WriteLine("Error: Palette has too many entries!");
+                    return null;
+                }
+
+                ColorPalette = new Color[(int)(Chunks[CurrenctChunk].ChunkData.Length / 3)];
+                for(int i = 0; i < (int)(Chunks[CurrenctChunk].ChunkData.Length / 3); i++)
+                {
+                    ColorPalette[i] = new Color(Chunks[CurrenctChunk].ChunkData[i*3],Chunks[CurrenctChunk].ChunkData[i*3 + 1],Chunks[CurrenctChunk].ChunkData[i*3 + 1], 0);
+                }
+            }
+
+            // -------------------- Ancillary chunks -------------------- //
+            // -- bKGD -- //
+            int bKGDindex = -1;
+            for (int i = 0; i < Chunks.Length; i++)
+            {
+                if (CompareBytes(Chunks[i].ChunkType, new byte[] { 98, 75, 71, 68 }))
+                {
+                    bKGDindex = i;
+                    break;
+                }
+            }
+
+            if (bKGDindex > 0 && CompareBytes(Chunks[bKGDindex].ChunkType, new byte[] { 98, 75, 71, 68 }))
+            {   
+                //TODO: PALAA ASIAAN
+                if(colorType == 3) //Contains palette index
+                {
+
+                }
+
+                /*
+
+                he bKGD chunk specifies a default background color to present the image against. Note that viewers are not bound to honor this chunk; a viewer can choose to use a different background.
+
+                For color type 3 (indexed color), the bKGD chunk contains:
+
+                Palette index:  1 byte
+
+                The value is the palette index of the color to be used as background.
+
+                For color types 0 and 4 (grayscale, with or without alpha), bKGD contains:
+
+                Gray:  2 bytes, range 0 .. (2^bitdepth)-1
+
+                (For consistency, 2 bytes are used regardless of the image bit depth.) The value is the gray level to be used as background.
+
+                For color types 2 and 6 (truecolor, with or without alpha), bKGD contains:
+
+                Red:   2 bytes, range 0 .. (2^bitdepth)-1
+                Green: 2 bytes, range 0 .. (2^bitdepth)-1
+                Blue:  2 bytes, range 0 .. (2^bitdepth)-1
+
+                (For consistency, 2 bytes per sample are used regardless of the image bit depth.) This is the RGB color to be used as background.
+
+                When present, the bKGD chunk must precede the first IDAT chunk, and must follow the PLTE chunk, if any. 
+
+                */
+            }
+
+            // -- cHRM  -- //
+            int cHRMindex = -1;
+            for (int i = 0; i < Chunks.Length; i++)
+            {
+                if (CompareBytes(Chunks[i].ChunkType, new byte[] { 99, 72, 82, 77 }))
+                {
+                    cHRMindex = i;
+                    break;
+                }
+            }
+
+            if (cHRMindex > 0 && CompareBytes(Chunks[cHRMindex].ChunkType, new byte[] { 99, 72, 82, 77 }))
+            {   
+                
+            }
 
             Image I = new Image();
 
             return I;
+        }
+
+        public float gAMA(Chunk C)
+        {
+            return BytesToDecimal(C.ChunkData);
         }
 
         public int BytesToDecimal(byte[] data)

@@ -1,25 +1,27 @@
 {
   "format": 1,
   "restore": {
-    "D:\\Documents\\Ohjelmointi\\Python\\Imagemanipulation-CSharp_WIP\\Imagemanipulation-CSharp_WIP.csproj": {}
+    "C:\\Users\\aarnjunk\\Documents\\GitHub\\Imagemanipulation-CSharp_WIP\\Imagemanipulation-CSharp_WIP.csproj": {}
   },
   "projects": {
-    "D:\\Documents\\Ohjelmointi\\Python\\Imagemanipulation-CSharp_WIP\\Imagemanipulation-CSharp_WIP.csproj": {
+    "C:\\Users\\aarnjunk\\Documents\\GitHub\\Imagemanipulation-CSharp_WIP\\Imagemanipulation-CSharp_WIP.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\Documents\\Ohjelmointi\\Python\\Imagemanipulation-CSharp_WIP\\Imagemanipulation-CSharp_WIP.csproj",
+        "projectUniqueName": "C:\\Users\\aarnjunk\\Documents\\GitHub\\Imagemanipulation-CSharp_WIP\\Imagemanipulation-CSharp_WIP.csproj",
         "projectName": "Imagemanipulation-CSharp_WIP",
-        "projectPath": "D:\\Documents\\Ohjelmointi\\Python\\Imagemanipulation-CSharp_WIP\\Imagemanipulation-CSharp_WIP.csproj",
-        "packagesPath": "C:\\Users\\aarni\\.nuget\\packages\\",
-        "outputPath": "D:\\Documents\\Ohjelmointi\\Python\\Imagemanipulation-CSharp_WIP\\obj\\",
+        "projectPath": "C:\\Users\\aarnjunk\\Documents\\GitHub\\Imagemanipulation-CSharp_WIP\\Imagemanipulation-CSharp_WIP.csproj",
+        "packagesPath": "C:\\Users\\aarnjunk\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\aarnjunk\\Documents\\GitHub\\Imagemanipulation-CSharp_WIP\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\aarni\\AppData\\Roaming\\NuGet\\NuGet.Config"
+          "C:\\Users\\aarnjunk\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
           "net8.0"
         ],
         "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
@@ -32,11 +34,6 @@
           "warnAsError": [
             "NU1605"
           ]
-        },
-        "restoreAuditProperties": {
-          "enableAudit": "true",
-          "auditLevel": "low",
-          "auditMode": "direct"
         }
       },
       "frameworks": {
@@ -58,7 +55,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.201/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.101/PortableRuntimeIdentifierGraph.json"
         }
       }
     }
