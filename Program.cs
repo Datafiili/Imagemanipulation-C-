@@ -165,6 +165,25 @@ namespace ImageEdit
             int filterMethod = 0; //1 byte
             int interlaceMethod = 0; //1 byte
 
+            //gAMA variable
+            float ImageGamma = -1f; //If negative -> No Gamma determined.
+            //cHRM variables
+            float WhitePointX = -1; //4 bytes
+            float WhitePointY = -1; // 4 bytes
+            float RedX = -1; // 4 bytes
+            float RedY = -1; // 4 bytes
+            float GreenX = -1; // 4 bytes
+            float GreenY = -1; // 4 bytes
+            float BlueX = -1; // 4 bytes
+            float BlueY = -1; // 4 bytes
+            //sRGB
+            int RenderingIntent = -1;
+            //sBIT
+            int significantGreyscaleBits = -1; // 1 byte
+            int significantRedBits = -1; //   1 byte
+            int significantGreenBits = -1; //  1 byte
+            int significantBlueBits = -1; //   1 byte
+            int significantAlphaBits = -1; //  1 byte
             // -- Convert chunks to image -- //
             Console.WriteLine("// -- Chunks -- //");
 
@@ -197,7 +216,7 @@ namespace ImageEdit
                 Console.WriteLine("interlaceMethod: " + interlaceMethod);
             }
 
-            float ImageGamma = -1f; //If negative -> No Gamma determined.
+            
 
             bool FoundPLTE = false;
             while(true)
@@ -207,22 +226,59 @@ namespace ImageEdit
                 //Must appear before PLTE if they even appear.
                 switch(System.Text.Encoding.ASCII.GetString(Chunks[CurrenctChunk].ChunkType)) 
                 {
-                case "sRGB":
-                    Console.WriteLine("Call sRGB function");
-                    break;
-                case "cHRM":
-                    Console.WriteLine("Call cHRM function");
-                    break;
-                case "gAMA":
-                    Console.WriteLine("Call gAMA function");
-                    ImageGamma = gAMA(Chunks[CurrenctChunk]);     
-                    break;
-                case "sBIT":
-                    Console.WriteLine("Call sBIT function");                
-                    break;
-                case "PLTE":
-                    FoundPLTE = true;   
-                    break;
+                    case "sRGB":
+                        RenderingIntent = BytesToDecimal(Chunks[CurrenctChunk].ChunkData);
+                        Console.WriteLine("sRGB data collected");
+                        break;
+                    case "cHRM":
+                        //TODO: Test if works
+                        byte[] holderArray = new byte[] { 0, 0, 0, 0 };
+                        Array.Copy(Chunks[CurrenctChunk].ChunkData, 0, holderArray, 0, 4);
+                        WhitePointX = BytesToDecimal(holderArray) / 100000; //4 bytes
+                        Array.Copy(Chunks[CurrenctChunk].ChunkData, 0, holderArray, 0, 4);
+                        WhitePointY = BytesToDecimal(holderArray) / 100000; //4 bytes
+                        Array.Copy(Chunks[CurrenctChunk].ChunkData, 4, holderArray, 0, 4);
+                        RedX = BytesToDecimal(holderArray) / 100000; //4 bytes
+                        Array.Copy(Chunks[CurrenctChunk].ChunkData, 8, holderArray, 0, 4);
+                        RedY = BytesToDecimal(holderArray) / 100000; //4 bytes
+                        Array.Copy(Chunks[CurrenctChunk].ChunkData, 12, holderArray, 0, 4);
+                        GreenX = BytesToDecimal(holderArray) / 100000; //4 bytes
+                        Array.Copy(Chunks[CurrenctChunk].ChunkData, 16, holderArray, 0, 4);
+                        GreenY = BytesToDecimal(holderArray) / 100000; //4 bytes
+                        Array.Copy(Chunks[CurrenctChunk].ChunkData, 20, holderArray, 0, 4);
+                        BlueX = BytesToDecimal(holderArray) / 100000; //4 bytes
+                        Array.Copy(Chunks[CurrenctChunk].ChunkData, 24, holderArray, 0, 4);
+                        BlueY = BytesToDecimal(holderArray) / 100000; //4 bytes
+                        Console.WriteLine("cHRM data collected");
+                        break;
+                    case "gAMA":
+                        ImageGamma = BytesToDecimal(Chunks[CurrenctChunk].ChunkData);
+                        Console.WriteLine("gAMA data collected!");
+                        break;
+                    case "sBIT":
+                        if(colorType == 0 ||colorType == 4)
+                        {
+                            significantGreyscaleBits = BytesToDecimal(Chunks[CurrenctChunk].ChunkData[0]);
+                            if(colorType == 4)
+                            {
+                                significantAlphaBits = BytesToDecimal(Chunks[CurrenctChunk].ChunkData[1]);
+                            }
+                        }
+                        else if(colorType == 2 || colorType == 3 || colorType == 6){
+                            significantRedBits = BytesToDecimal(Chunks[CurrenctChunk].ChunkData[0]);
+                            significantGreenBits = BytesToDecimal(Chunks[CurrenctChunk].ChunkData[1]);
+                            significantBlueBits = BytesToDecimal(Chunks[CurrenctChunk].ChunkData[2]);
+                            if(colorType == 6)
+                            {
+                                significantAlphaBits = BytesToDecimal(Chunks[CurrenctChunk].ChunkData[3]);
+                            }
+                        }
+                        
+                        Console.WriteLine("Call sBIT function");                
+                        break;
+                    case "PLTE":
+                        FoundPLTE = true;   
+                        break;
                 }
                  
                 if(FoundPLTE){
@@ -334,11 +390,6 @@ namespace ImageEdit
             Image I = new Image();
 
             return I;
-        }
-
-        public float gAMA(Chunk C)
-        {
-            return BytesToDecimal(C.ChunkData);
         }
 
         public int BytesToDecimal(byte[] data)

@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("Imagemanipulation-CSharp_WIP")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+cce2b683b6062e9aaba5e478a189ad75b7cd584e")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+595e763876d8f181a67d0a9beb66386b42473299")]
 [assembly: System.Reflection.AssemblyProductAttribute("Imagemanipulation-CSharp_WIP")]
 [assembly: System.Reflection.AssemblyTitleAttribute("Imagemanipulation-CSharp_WIP")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
